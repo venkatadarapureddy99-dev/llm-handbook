@@ -75,3 +75,33 @@ def test_single_character_corpus_stops_without_merges() -> None:
 
     assert tokenizer.merges == []
     assert tokenizer.decode(tokenizer.encode("a")) == "a"
+
+
+def test_round_trip_preserves_unicode_and_whitespace() -> None:
+    text = "café 🙂\n  café"
+
+    tokenizer = BPETokenizer()
+    tokenizer.train(text, num_merges=10)
+
+    assert tokenizer.decode(tokenizer.encode(text)) == text
+
+
+def test_overlapping_pairs_merge_left_to_right() -> None:
+    symbols = ["a", "a", "a"]
+
+    assert BPETokenizer._merge_pair(
+        symbols,
+        ("a", "a"),
+    ) == ["aa", "a"]
+
+
+def test_retraining_replaces_previous_vocabulary() -> None:
+    tokenizer = BPETokenizer()
+    tokenizer.train("banana", num_merges=3)
+
+    tokenizer.train("cocoa", num_merges=3)
+
+    assert tokenizer.decode(tokenizer.encode("cocoa")) == "cocoa"
+
+    with pytest.raises(ValueError, match="outside the training vocabulary"):
+        tokenizer.encode("banana")
