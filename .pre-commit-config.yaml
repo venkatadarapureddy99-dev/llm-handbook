@@ -1,0 +1,35 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: Ruff format
+        entry: uv run ruff format --check
+        language: system
+        types: [python]
+
+      - id: ruff-check
+        name: Ruff lint
+        entry: uv run ruff check
+        language: system
+        types: [python]
+
+      - id: mypy
+        name: Mypy
+        entry: uv run mypy lib
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: bandit
+        name: Bandit security scan
+        entry: uv run bandit -r lib
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: pytest
+        name: Tests and coverage
+        entry: uv run pytest --cov=lib --cov-branch --cov-report=term-missing
+        language: system
+        pass_filenames: false
+        always_run: true

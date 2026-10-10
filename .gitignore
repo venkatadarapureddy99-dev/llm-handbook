@@ -1,0 +1,29 @@
+# Python environments
+.venv/
+__pycache__/
+*.py[cod]
+
+# Testing and quality tools
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Generated data and model artifacts
+data/raw/
+data/processed/
+*.pt
+*.npy
+*.safetensors
+checkpoints/
+adapters/
+
+# OS files
+.DS_Store
